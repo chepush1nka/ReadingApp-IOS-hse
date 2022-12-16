@@ -1,0 +1,272 @@
+//
+//  HomeViewController.swift
+//  ReadingAppIOShse
+//
+//  Created by Павел Вяльцев on 24.11.2022.
+//
+
+import UIKit
+
+class BooksViewController: UIViewController {
+    
+    let sections: [Section] = [
+        Section(
+            type: "recommendedBooks",
+            title: "Recommended",
+            items: [
+                "Sink_or_Swim-Andy_Cowle",
+                "Supermodels-Vicky_Shipton",
+                "Barchester_Towers-Anthony_Trollope",
+                "Jack_the_Ripper-Foreman_Peter",
+            ]
+        ),
+        Section(
+            type: "allBooks",
+            title: "All books",
+            items: [
+                "Breakfast_at_Tiffanys-Truman_Capote",
+                "Muhammad_Ali-B_Smith",
+                "Message_in_a_Bottle-Nicholas_Sparks",
+                "Mine_Boy-Peter_Abrahams",
+                "The_Magician-W_Somerset_Maugham",
+            ]
+        )
+    ]
+    
+    var collectionView: UICollectionView!
+    
+    var dataSource: UICollectionViewDiffableDataSource<Section, String>?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        
+        setupCollectionView()
+        createDataSource()
+        reloadData()
+    }
+    
+    
+    func setupCollectionView() {
+        collectionView = UICollectionView(frame: view.bounds,
+                                          collectionViewLayout: createCompositionalLayout())
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        collectionView.backgroundColor = .systemBackground
+        view.addSubview(collectionView)
+        
+        collectionView.register(BookVerticalCell.self, forCellWithReuseIdentifier: BookVerticalCell.reuseId)
+        
+        collectionView.register(RecommendedBooksCell.self, forCellWithReuseIdentifier: RecommendedBooksCell.reuseId)
+        
+        collectionView.register(SectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader ,withReuseIdentifier: SectionHeader.reuseId)
+        
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+    }
+    
+    func createDataSource() {
+        dataSource = UICollectionViewDiffableDataSource<Section, String>(collectionView: collectionView, cellProvider: {
+            (collectionView, indexPath, book) -> UICollectionViewCell? in
+            switch self.sections[indexPath.section].type {
+            case "recommendedBooks":
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedBooksCell.reuseId,
+                                                              for: indexPath) as? RecommendedBooksCell
+                cell?.configure(with: book)
+                return cell
+            default:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookVerticalCell.reuseId,
+                                                              for: indexPath) as? BookVerticalCell
+                cell?.configure(with: book)
+                return cell
+            }
+        })
+        
+        dataSource?.supplementaryViewProvider = {
+            collectionView, kind, indexPath in
+            guard let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeader.reuseId, for: indexPath) as? SectionHeader else { return nil }
+            guard let firstChat = self.dataSource?.itemIdentifier(for: indexPath) else { return nil }
+            guard let section = self.dataSource?.snapshot().sectionIdentifier(containingItem: firstChat) else { return nil }
+            if section.title.isEmpty { return nil }
+            
+            sectionHeader.title.text = section.title
+            return sectionHeader
+        }
+    }
+    
+    func reloadData() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, String>()
+        snapshot.appendSections(sections)
+        
+        for section in sections {
+            snapshot.appendItems(section.items, toSection: section)
+        }
+        
+        dataSource?.apply(snapshot)
+    }
+    
+    func createCompositionalLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
+            let section = self.sections[sectionIndex]
+            
+            switch section.type {
+            case "recommendedBooks":
+                return self.createRecommendedBooksSection()
+            default:
+                return self.createAllBooksSection()
+            }
+        }
+        
+        return layout
+    }
+    
+    func createRecommendedBooksSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 20, trailing: 10)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .estimated(163.0), heightDimension: .estimated(290))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets.init(top: 16, leading: 17, bottom: 0, trailing: 0)
+        
+        let header = createSectionHeader()
+        section.boundarySupplementaryItems = [header]
+        return section
+    }
+    
+    func createAllBooksSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(150))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 20, trailing: 0)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(1))
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets.init(top: 16, leading: 17, bottom: 0, trailing: 30)
+        
+        let header = createSectionHeader()
+        section.boundarySupplementaryItems = [header]
+        
+        return section
+    }
+    
+    func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+        let layoutSectionHEaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))
+        let layoutSectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSectionHEaderSize,
+                                                                              elementKind: UICollectionView.elementKindSectionHeader,
+                                                                              alignment: .top)
+        return layoutSectionHeader
+    }
+    
+    
+    
+}
+
+extension BooksViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return sections[section].items.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.section == 1 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedBooksCell.reuseId, for: indexPath) as! RecommendedBooksCell
+            return cell
+        }
+            
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookVerticalCell.reuseId, for: indexPath) as! BookVerticalCell
+        return cell
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let book = sections[indexPath.section].items[indexPath.item]
+        let vc = BookDescriptionSheet()
+        vc.configure(with: book)
+        
+        self.present(vc, animated: true)
+    }
+}
+
+
+//Section(
+//    type: "recommendedBooks",
+//    title: "Recommended",
+//    items: [
+//        Book(
+//            name: "Bitter\nsfvsd\nvipdsp\njsvdjps\nvdjo",
+//            author: "Akwaeke \nEmezip\nodsvjdv\nsjpdsvpvdjos",
+//            image: "https://brittlepaper.com/wp-content/uploads/2022/01/bitter-book-cover-678x1024.jpeg",
+//            jenre: "Story book",
+//            release: "2017",
+//            language: "English"
+//        ),
+//        Book(
+//            name: "Dead Silence",
+//            author: "S. A. Barnes",
+//            image: "https://ssl-static.libsyn.com/p/assets/1/6/2/4/162443c9f0ea6e9727a2322813b393ee/deadsilence.jpg",
+//            jenre: "Story book",
+//            release: "2017",
+//            language: "English"
+//        ),
+//        Book(
+//            name: "Biter",
+//            author: "Akwaeke Emezi",
+//            image: "https://brittlepaper.com/wp-content/uploads/2022/01/bitter-book-cover-678x1024.jpeg",
+//            jenre: "Story book",
+//            release: "2017",
+//            language: "English"
+//        ),
+//        Book(
+//            name: "Bitterr",
+//            author: "Akwaeke Emezi",
+//            image: "https://brittlepaper.com/wp-content/uploads/2022/01/bitter-book-cover-678x1024.jpeg",
+//            jenre: "Story book",
+//            release: "2017",
+//            language: "English"
+//        ),
+//    ]
+//),
+//Section(
+//    type: "allBooks",
+//    title: "All books",
+//    items: [
+//        Book(
+//            name: "Hunt the stars jo[jo j [jpooj[[ [j joj[joop [j [opjjop [jop",
+//            author: "Jessie Mihalik",
+//            image: "https://www.orbitbooks.net/wp-content/uploads/2017/04/Chaos-of-Luck-E1.jpg",
+//            jenre: "Story book",
+//            release: "2017",
+//            language: "English"
+//        ),
+//        Book(
+//            name: "Mickey 7",
+//            author: "Jessie Mihalik",
+//            image: "https://thebookcoverdesigner.com/wp-content/uploads/2017/11/YA-SF-3.png",
+//            jenre: "Story book",
+//            release: "2017",
+//            language: "English"
+//        ),
+//        Book(
+//            name: "Moon Witch",
+//            author: "Jessie Mihalik",
+//            image: "https://i.ebayimg.com/images/g/JnoAAOSwgPBhXsDP/s-l640.jpg",
+//            jenre: "Story book",
+//            release: "2017",
+//            language: "English"
+//        ),
+//        Book(
+//            name: "Bittere",
+//            author: "Akwaeke Emezi",
+//            image: "https://brittlepaper.com/wp-content/uploads/2022/01/bitter-book-cover-678x1024.jpeg",
+//            jenre: "Story book",
+//            release: "2017",
+//            language: "English"
+//        ),
+//    ]
+//)
