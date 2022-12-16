@@ -25,7 +25,7 @@ class SignInHeaderView: UIView {
         return label
     }()
     
-    let descript: UILabel = {
+    private let descript: UILabel = {
         let label = UILabel()
         //label.textAlignment = .left
         label.numberOfLines = 0

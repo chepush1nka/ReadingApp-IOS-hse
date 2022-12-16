@@ -9,7 +9,7 @@ import UIKit
 
 class BooksViewController: UIViewController {
     
-    let sections: [Section] = [
+    private let sections: [Section] = [
         Section(
             type: "recommendedBooks",
             title: "Recommended",
@@ -33,9 +33,9 @@ class BooksViewController: UIViewController {
         )
     ]
     
-    var collectionView: UICollectionView!
+    private var collectionView: UICollectionView!
     
-    var dataSource: UICollectionViewDiffableDataSource<Section, String>?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, String>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +47,7 @@ class BooksViewController: UIViewController {
     }
     
     
-    func setupCollectionView() {
+    private func setupCollectionView() {
         collectionView = UICollectionView(frame: view.bounds,
                                           collectionViewLayout: createCompositionalLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -65,7 +65,7 @@ class BooksViewController: UIViewController {
         collectionView.dataSource = self
     }
     
-    func createDataSource() {
+    private func createDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, String>(collectionView: collectionView, cellProvider: {
             (collectionView, indexPath, book) -> UICollectionViewCell? in
             switch self.sections[indexPath.section].type {
@@ -94,7 +94,7 @@ class BooksViewController: UIViewController {
         }
     }
     
-    func reloadData() {
+    private func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, String>()
         snapshot.appendSections(sections)
         
@@ -105,7 +105,7 @@ class BooksViewController: UIViewController {
         dataSource?.apply(snapshot)
     }
     
-    func createCompositionalLayout() -> UICollectionViewLayout {
+    private func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             let section = self.sections[sectionIndex]
             
@@ -120,7 +120,7 @@ class BooksViewController: UIViewController {
         return layout
     }
     
-    func createRecommendedBooksSection() -> NSCollectionLayoutSection {
+    private func createRecommendedBooksSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -138,7 +138,7 @@ class BooksViewController: UIViewController {
         return section
     }
     
-    func createAllBooksSection() -> NSCollectionLayoutSection {
+    private func createAllBooksSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(150))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -156,7 +156,7 @@ class BooksViewController: UIViewController {
         return section
     }
     
-    func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let layoutSectionHEaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))
         let layoutSectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSectionHEaderSize,
                                                                               elementKind: UICollectionView.elementKindSectionHeader,
@@ -193,80 +193,3 @@ extension BooksViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
 }
 
-
-//Section(
-//    type: "recommendedBooks",
-//    title: "Recommended",
-//    items: [
-//        Book(
-//            name: "Bitter\nsfvsd\nvipdsp\njsvdjps\nvdjo",
-//            author: "Akwaeke \nEmezip\nodsvjdv\nsjpdsvpvdjos",
-//            image: "https://brittlepaper.com/wp-content/uploads/2022/01/bitter-book-cover-678x1024.jpeg",
-//            jenre: "Story book",
-//            release: "2017",
-//            language: "English"
-//        ),
-//        Book(
-//            name: "Dead Silence",
-//            author: "S. A. Barnes",
-//            image: "https://ssl-static.libsyn.com/p/assets/1/6/2/4/162443c9f0ea6e9727a2322813b393ee/deadsilence.jpg",
-//            jenre: "Story book",
-//            release: "2017",
-//            language: "English"
-//        ),
-//        Book(
-//            name: "Biter",
-//            author: "Akwaeke Emezi",
-//            image: "https://brittlepaper.com/wp-content/uploads/2022/01/bitter-book-cover-678x1024.jpeg",
-//            jenre: "Story book",
-//            release: "2017",
-//            language: "English"
-//        ),
-//        Book(
-//            name: "Bitterr",
-//            author: "Akwaeke Emezi",
-//            image: "https://brittlepaper.com/wp-content/uploads/2022/01/bitter-book-cover-678x1024.jpeg",
-//            jenre: "Story book",
-//            release: "2017",
-//            language: "English"
-//        ),
-//    ]
-//),
-//Section(
-//    type: "allBooks",
-//    title: "All books",
-//    items: [
-//        Book(
-//            name: "Hunt the stars jo[jo j [jpooj[[ [j joj[joop [j [opjjop [jop",
-//            author: "Jessie Mihalik",
-//            image: "https://www.orbitbooks.net/wp-content/uploads/2017/04/Chaos-of-Luck-E1.jpg",
-//            jenre: "Story book",
-//            release: "2017",
-//            language: "English"
-//        ),
-//        Book(
-//            name: "Mickey 7",
-//            author: "Jessie Mihalik",
-//            image: "https://thebookcoverdesigner.com/wp-content/uploads/2017/11/YA-SF-3.png",
-//            jenre: "Story book",
-//            release: "2017",
-//            language: "English"
-//        ),
-//        Book(
-//            name: "Moon Witch",
-//            author: "Jessie Mihalik",
-//            image: "https://i.ebayimg.com/images/g/JnoAAOSwgPBhXsDP/s-l640.jpg",
-//            jenre: "Story book",
-//            release: "2017",
-//            language: "English"
-//        ),
-//        Book(
-//            name: "Bittere",
-//            author: "Akwaeke Emezi",
-//            image: "https://brittlepaper.com/wp-content/uploads/2022/01/bitter-book-cover-678x1024.jpeg",
-//            jenre: "Story book",
-//            release: "2017",
-//            language: "English"
-//        ),
-//    ]
-//)

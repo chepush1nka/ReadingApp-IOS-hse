@@ -97,7 +97,7 @@ class SignUpViewController: UITabBarController {
         
     }
     
-    @objc func didTapSignUp() {
+    @objc private func didTapSignUp() {
         guard let email = emailField.text, !email.isEmpty,
               let password = passwordField.text, !password.isEmpty,
               let name = nameField.text, !name.isEmpty else {
@@ -131,7 +131,7 @@ class SignUpViewController: UITabBarController {
         }
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
                 self.view.frame.origin.y += (view.bounds.height - keyboardSize.height - 700)
@@ -139,7 +139,7 @@ class SignUpViewController: UITabBarController {
         }
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc private func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
         }

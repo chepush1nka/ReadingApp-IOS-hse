@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 
 class CurrentBookCell: UICollectionViewCell {
-    static var reuseId: String = "ActiveChatCell"
+    public static var reuseId: String = "ActiveChatCell"
     
-    let bookName = UILabel()
-    let authorName = UILabel()
-    let descriptionText = UILabel()
+    private let bookName = UILabel()
+    private let authorName = UILabel()
+    private let descriptionText = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,13 +26,13 @@ class CurrentBookCell: UICollectionViewCell {
         
     }
     
-    func setupElements() {
+    private func setupElements() {
         bookName.translatesAutoresizingMaskIntoConstraints = false
         authorName.translatesAutoresizingMaskIntoConstraints = false
         descriptionText.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func configure(with book: String) {
+    public func configure(with book: String) {
         let epubExt = EpubExtract()
         epubExt.epubName = book
         
@@ -55,7 +55,7 @@ class CurrentBookCell: UICollectionViewCell {
 
 // MARK: - Setup Constraints
 extension CurrentBookCell {
-    func setupConstraints() {
+    private func setupConstraints() {
         addSubview(descriptionText)
         addSubview(bookName)
         addSubview(authorName)

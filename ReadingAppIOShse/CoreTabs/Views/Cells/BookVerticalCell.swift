@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 
 class BookVerticalCell: UICollectionViewCell {
-    static var reuseId: String = "ActiveChatCell"
-    var book: String = ""
+    public static var reuseId: String = "ActiveChatCell"
+    private var book: String = ""
     
-    let bookImageView = UIImageView()
-    let plusButton = UIButton()
-    let bookName = UILabel()
-    let authorName = UILabel()
+    private let bookImageView = UIImageView()
+    private let plusButton = UIButton()
+    private let bookName = UILabel()
+    private let authorName = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,7 +28,7 @@ class BookVerticalCell: UICollectionViewCell {
         
     }
     
-    func setupElements() {
+    private func setupElements() {
         bookName.translatesAutoresizingMaskIntoConstraints = false
         authorName.translatesAutoresizingMaskIntoConstraints = false
         bookImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,19 +55,8 @@ class BookVerticalCell: UICollectionViewCell {
     }
     
     @objc
-    func plusButtonAction(_ sender: UIImageView) {
-//        var arr = UserDefaults.standard.stringArray(forKey: "epubNameP") ?? [String]()
-//        
-//        print(arr)
-//        if (!arr.contains(book)) {
-//            arr.append(book)
-//            UserDefaults.standard.set(arr, forKey: "epubName")
-//            UserDefaults.standard.synchronize()
-//            print(arr)
-//        }
+    private func plusButtonAction(_ sender: UIImageView) {
         
-        //let vc = BookDescriptionSheet()
-        //self.window?.rootViewController!.present(vc, animated: true, completion: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -77,7 +66,7 @@ class BookVerticalCell: UICollectionViewCell {
 
 // MARK: - Setup Constraints
 extension BookVerticalCell {
-    func setupConstraints() {
+    private func setupConstraints() {
         addSubview(bookImageView)
         addSubview(bookName)
         addSubview(authorName)

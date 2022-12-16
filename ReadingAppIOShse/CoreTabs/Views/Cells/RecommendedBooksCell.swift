@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 
 class RecommendedBooksCell: UICollectionViewCell {
-    static var reuseId: String = "RecommendedBooksCell"
+    public static var reuseId: String = "RecommendedBooksCell"
     
-    let bookImageView = UIImageView()
-    let bookName = UILabel()
-    let authorName = UILabel(frame: CGRect(x: 0, y: 0, width: 5, height: 20))
+    private let bookImageView = UIImageView()
+    private let bookName = UILabel()
+    private let authorName = UILabel(frame: CGRect(x: 0, y: 0, width: 5, height: 20))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,7 +23,7 @@ class RecommendedBooksCell: UICollectionViewCell {
         setupConstraints()
     }
     
-    func configure(with book: String) {
+    public func configure(with book: String) {
         let epubExt = EpubExtract()
         epubExt.epubName = book
         
@@ -39,7 +39,7 @@ class RecommendedBooksCell: UICollectionViewCell {
         }
     }
     
-    func setupElements() {
+    private func setupElements() {
         bookName.translatesAutoresizingMaskIntoConstraints = false
         authorName.translatesAutoresizingMaskIntoConstraints = false
         bookImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ class RecommendedBooksCell: UICollectionViewCell {
 
 // MARK: - Setup Constraints
 extension RecommendedBooksCell {
-    func setupConstraints() {
+    private func setupConstraints() {
         addSubview(bookImageView)
         addSubview(bookName)
         addSubview(authorName)

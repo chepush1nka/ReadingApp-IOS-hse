@@ -10,9 +10,8 @@ import UIKit
 
 class ProfileLabelView: UIView {
     
-    let label: UILabel = {
+    private let label: UILabel = {
         let label = UILabel()
-        //label.textAlignment = .left
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .regular)
         label.text = "\"A reader lives a thousand lives before he dies... The man who never reads lives only one.\"\n\nGeorge R.R. Martin"
@@ -33,8 +32,9 @@ class ProfileLabelView: UIView {
 
 }
 
+// MARK: - Setup Constraints
 extension ProfileLabelView {
-    func setupConstraints() {
+    private func setupConstraints() {
         self.addSubview(label)
         self.layer.cornerRadius = 20.0
         self.backgroundColor = UIColor(red: 1, green: 0.69803921568, blue: 0.11372549019, alpha: 1)

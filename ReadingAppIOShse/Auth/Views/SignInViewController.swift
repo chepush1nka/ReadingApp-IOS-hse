@@ -91,7 +91,7 @@ class SignInViewController: UITabBarController {
         createAccountButton.frame = CGRect(x: 20, y: signInButton.bottom + 10, width: view.width - 40, height: 50)
     }
     
-    @objc func didTapSignIn() {
+    @objc private func didTapSignIn() {
         guard let email = emailField.text, !email.isEmpty else {
             emailField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red.withAlphaComponent(0.6)])
             if passwordField.text == nil || passwordField.text!.isEmpty {
@@ -119,7 +119,7 @@ class SignInViewController: UITabBarController {
         }
     }
     
-    @objc func didTapCreateAccount() {
+    @objc private func didTapCreateAccount() {
         let vc = SignUpViewController()
         vc.title = "Sign Up"
         vc.navigationItem.largeTitleDisplayMode = .never
@@ -145,7 +145,7 @@ extension SignInViewController: UITextFieldDelegate {
 }
 
 extension SignInViewController {
-    @objc func keyboardWillShow(notification: NSNotification) {
+    @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
                 self.view.frame.origin.y += (view.bounds.height - keyboardSize.height - 700)
@@ -153,7 +153,7 @@ extension SignInViewController {
         }
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc private func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
         }

@@ -9,9 +9,9 @@ import UIKit
 
 
 class LibraryViewController: UIViewController {
-    let epubExt = EpubExtract()
+    private let epubExt = EpubExtract()
     
-    var sections: [Section] = [
+    private var sections: [Section] = [
         Section(
             type: "allBooks",
             title: "k",
@@ -31,24 +31,9 @@ class LibraryViewController: UIViewController {
         )
     ]
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        let defaults = UserDefaults.standard
-//        do {
-//            let a = try defaults.stringArray(forKey: "epubNameP") ?? [String]()
-//            if a == nil {
-//                return
-//            }
-//            sections[1].items = a
-//            //reloadData()
-//        }
-//        catch {
-//            print("m")
-//        }
-//    }
-//    
-    var collectionView: UICollectionView!
+    private var collectionView: UICollectionView!
     
-    var dataSource: UICollectionViewDiffableDataSource<Section, String>?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, String>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +45,7 @@ class LibraryViewController: UIViewController {
     }
     
     
-    func setupCollectionView() {
+    private func setupCollectionView() {
         collectionView = UICollectionView(frame: view.bounds,
                                           collectionViewLayout: createCompositionalLayout())
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -78,7 +63,7 @@ class LibraryViewController: UIViewController {
         collectionView.dataSource = self
     }
     
-    func createDataSource() {
+    private func createDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, String>(collectionView: collectionView, cellProvider: {
             (collectionView, indexPath, book) -> UICollectionViewCell? in
             switch self.sections[indexPath.section].type {
@@ -106,7 +91,7 @@ class LibraryViewController: UIViewController {
        }
     }
     
-    func reloadData() {
+    private func reloadData() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, String>()
         snapshot.appendSections(sections)
         
@@ -117,7 +102,7 @@ class LibraryViewController: UIViewController {
         dataSource?.apply(snapshot)
     }
     
-    func createCompositionalLayout() -> UICollectionViewLayout {
+    private func createCompositionalLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             let section = self.sections[sectionIndex]
             
@@ -132,7 +117,7 @@ class LibraryViewController: UIViewController {
         return layout
     }
     
-    func createRecommendedBooksSection() -> NSCollectionLayoutSection {
+    private func createRecommendedBooksSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -150,7 +135,7 @@ class LibraryViewController: UIViewController {
         return section
     }
     
-    func createAllBooksSection() -> NSCollectionLayoutSection {
+    private func createAllBooksSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(view.frame.height/3))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -165,7 +150,7 @@ class LibraryViewController: UIViewController {
         return section
     }
     
-    func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    private func createSectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
         let layoutSectionHEaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(1))
         let layoutSectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSectionHEaderSize,
                                                                               elementKind: UICollectionView.elementKindSectionHeader,

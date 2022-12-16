@@ -14,12 +14,16 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        view.addSubview(headerView)
-        headerView.frame = CGRect(x: 17, y: 150, width: view.bounds.width - 34, height: view.bounds.height/6)
+        setupHeaderView()
         setupSignOutButton()
     }
     
-    func setupSignOutButton() {
+    private func setupHeaderView() {
+        view.addSubview(headerView)
+        headerView.frame = CGRect(x: 17, y: 150, width: view.bounds.width - 34, height: view.bounds.height/6)
+    }
+    
+    private func setupSignOutButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: "Sign Out",
             style: .done,

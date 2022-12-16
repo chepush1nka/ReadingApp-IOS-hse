@@ -11,10 +11,8 @@ import EpubExtractor
 
 class TextExtractorViewController: UIViewController {
     
-    let textView = UITextView()
-    var scrolled = CGPoint()
-    //let closeButton = UIButton(type: .custom)
-    let closeButton = UIButton(type: .close)
+    private let textView = UITextView()
+    private let closeButton = UIButton(type: .close)
     
     var epub: Epub!
     
@@ -22,18 +20,12 @@ class TextExtractorViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
-       // if let data = UserDefaults.standard.object(forKey: "scrolled") as? Data,
-       //    let category = try? JSONDecoder().decode([CGPoint].self, from: data) {
-            //textView.contentOffset = category[0]
-       //     print(category)
-       // }
-        
         setupTextView()
         setupNavBar()
         setupConstraints()
     }
     
-    func setupTextView() {
+    private func setupTextView() {
         textView.frame = view.frame
         textView.text = extractText()
         textView.font = UIFont.systemFont(ofSize: 17.0)
@@ -42,7 +34,6 @@ class TextExtractorViewController: UIViewController {
     
     private func setupNavBar() {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        //closeButton.setImage(UIImage(named: "BackArrow"), for: .normal)
         closeButton.addTarget(self, action: #selector(dismissViewController(_:)),
                               for: .touchUpInside)
         
@@ -53,7 +44,7 @@ class TextExtractorViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    func extractText() -> String {
+    private func extractText() -> String {
         do {
             return try epub.allContent()
         } catch {
@@ -64,7 +55,7 @@ class TextExtractorViewController: UIViewController {
 
 // MARK: - Setup Constraints
 extension TextExtractorViewController {
-    func setupConstraints() {
+    private func setupConstraints() {
         view.addSubview(textView)
         view.addSubview(closeButton)
         

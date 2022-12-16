@@ -10,30 +10,30 @@ import UIKit
 //import EpubExtractor
 
 class BookDescriptionSheet: UIViewController, UISheetPresentationControllerDelegate {
-    let epubExt = EpubExtract()
+    private let epubExt = EpubExtract()
     
     override var sheetPresentationController: UISheetPresentationController {
         presentationController as! UISheetPresentationController
     }
     
-    let closeButton = UIButton(type: .custom)
-    let readButton = UIButton(type: .custom)
-    let bookImageView = UIImageView()
-    let titleLabel = UILabel()
-    let authorLabel = UILabel()
-    let publisherLabel = UILabel()
-    let currentPublisherLabel = UILabel()
-    let jenreLabel = UILabel()
-    let currentJenreLabel = UILabel()
-    let languageLabel = UILabel()
-    let currentLanguageLabel = UILabel()
+    private let closeButton = UIButton(type: .custom)
+    private let readButton = UIButton(type: .custom)
+    private let bookImageView = UIImageView()
+    private let titleLabel = UILabel()
+    private let authorLabel = UILabel()
+    private let publisherLabel = UILabel()
+    private let currentPublisherLabel = UILabel()
+    private let jenreLabel = UILabel()
+    private let currentJenreLabel = UILabel()
+    private let languageLabel = UILabel()
+    private let currentLanguageLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
     }
     
-    func configure(with book: String) {
+    public func configure(with book: String) {
         epubExt.epubName = book
     }
     
@@ -48,7 +48,7 @@ class BookDescriptionSheet: UIViewController, UISheetPresentationControllerDeleg
         setupBackground()
     }
     
-    func setupInfo() {
+    private func setupInfo() {
         titleLabel.text = epubExt.epub?.title
         titleLabel.numberOfLines = 5
         titleLabel.textColor = .black
@@ -111,7 +111,6 @@ class BookDescriptionSheet: UIViewController, UISheetPresentationControllerDeleg
     @objc
     func readButtonAction(_ sender: UIView) {
         guard let epub = epubExt.epub else { print("no epub"); return }
-        //sheetPresentationController.selectedDetentIdentifier = .large
         let vc = TextExtractorViewController()
         vc.modalPresentationStyle = .fullScreen
         vc.epub = epub
@@ -119,18 +118,17 @@ class BookDescriptionSheet: UIViewController, UISheetPresentationControllerDeleg
         
     }
     
-    func setupBackground() {
+    private func setupBackground() {
         view.backgroundColor = UIColor(red: 1, green: 0.69803921568, blue: 0.11372549019, alpha: 1)
     }
     
-    func setupSheetPresentationController() {
+    private func setupSheetPresentationController() {
         sheetPresentationController.delegate = self
         sheetPresentationController.selectedDetentIdentifier = .medium
         sheetPresentationController.prefersGrabberVisible = true
         sheetPresentationController.preferredCornerRadius = 20
         sheetPresentationController.detents = [
             .medium()
-           // .large(),
         ]
         
     }
@@ -151,7 +149,7 @@ class BookDescriptionSheet: UIViewController, UISheetPresentationControllerDeleg
 
 // MARK: - Setup Constraints
 extension BookDescriptionSheet {
-    func setupConstraints() {
+    private func setupConstraints() {
         view.addSubview(closeButton)
         view.addSubview(bookImageView)
         view.addSubview(titleLabel)
